@@ -4,10 +4,9 @@ from celery import Celery
 from queue import RedisQueue
 
 redis_url = os.environ['REDISTOGO_URL']
-# os.environ['CELERY_CONFIG_MODULE']
 
 app = Celery('tasks')
-app.conf.update(BROKER_URL=redis_url)
+app.config_from_object('celeryconfig')
 
 scraper_q = RedisQueue('scrapers', redis_url)
 trending_q = RedisQueue('trending', redis_url)
