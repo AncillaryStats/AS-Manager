@@ -24,5 +24,9 @@ def crawl_test():
     scraper_q.enqueue('CRAWL TEST MESSAGE')
 
 @app.task
+def dirs_test():
+    scraper_q.enqueue('PRINT DIRS')
+
+@app.task
 def get_trends():
-    q.put('GET TRENDING PLAYERS')
+    trending_q.enqueue('GET TRENDING PLAYERS')
