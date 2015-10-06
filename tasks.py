@@ -4,12 +4,13 @@ from celery import Celery
 from queue import RedisQueue
 
 redis_url = os.environ['REDISTOGO_URL']
+r = redis.Redis.from_url(redis_url)
 
 app = Celery('tasks')
 app.config_from_object('celeryconfig')
 
-scraper_q = RedisQueue('scrapers', redis_url)
-trending_q = RedisQueue('trending', redis_url)
+scraper_q = RedisQueue('scrapers', r)
+trending_q = RedisQueue('trending', r)
 
 @app.task
 def add(x, y):
