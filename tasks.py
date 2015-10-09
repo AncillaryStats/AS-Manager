@@ -1,33 +1,41 @@
 import os
-import redis
 from celery import Celery
-from queue import RedisQueue
-
-redis_url = os.environ['REDISTOGO_URL']
-r = redis.Redis.from_url(redis_url)
+import queue
 
 app = Celery('tasks')
 app.config_from_object('celeryconfig')
 
-scraper_q = RedisQueue('scrapers', r)
-trending_q = RedisQueue('trending', r)
-
 @app.task
 def add(x, y):
+    print 'hmmm'
     return x + y
 
 @app.task
 def crawl_all():
-    scraper_q.enqueue('CRAWL ALL SPIDERS')
+    """
+    Crawl all ESPN spiders - all player games, player info and team info
+    """
+    queue.scrapers.enqueue('CRAWL ALL SPIDERS')
+
+@app.task
+def crawl_games():
+    """
+    Crawl ESPN game stats
+    """
+    print('enqueueing message - CRAWL ALL GAMES @ scraper_q')
+    queue.scrapers.enqueue('CRAWL ALL GAMES')
 
 @app.task
 def crawl_test():
-    scraper_q.enqueue('CRAWL TEST MESSAGE')
-
-@app.task
-def dirs_test():
-    scraper_q.enqueue('PRINT DIRS')
+    """
+    Test message for crawling worker
+    """
+    queue.scrapers.enqueue('CRAWL TEST MESSAGE')
 
 @app.task
 def get_trends():
-    trending_q.enqueue('GET TRENDING PLAYERS')
+    """
+    Get trending players via Reddit API
+    """
+    queue.trending.enqueue('GET TRENDING PLAYERS')
+

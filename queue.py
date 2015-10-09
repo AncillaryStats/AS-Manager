@@ -1,4 +1,6 @@
+import os
 import redis
+r = redis.Redis.from_url(os.environ['REDISTOGO_URL'])
 
 class RedisQueue(object):
     """Redis backed queue"""
@@ -27,3 +29,6 @@ class RedisQueue(object):
             item = self.__db.lpop(self.key)
 
         return item
+
+scrapers = RedisQueue('scrapers', r)
+trending = RedisQueue('trending', r)
