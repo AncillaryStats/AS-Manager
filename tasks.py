@@ -6,11 +6,6 @@ app = Celery('tasks')
 app.config_from_object('celeryconfig')
 
 @app.task
-def add(x, y):
-    print 'hmmm'
-    return x + y
-
-@app.task
 def crawl_all():
     """
     Crawl all ESPN spiders - all player games, player info and team info
