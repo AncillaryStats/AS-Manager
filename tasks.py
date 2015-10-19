@@ -32,5 +32,13 @@ def get_trends():
     """
     Get trending players via Reddit API
     """
+    print('enqueueing message - GET TRENDING PLAYERS @ trending_q')
     queue.trending.enqueue('GET TRENDING PLAYERS')
+
+@app.task
+def test_message():
+    """
+    Print test message
+    """
+    print('Celery is running')
 
